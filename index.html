@@ -6,13 +6,39 @@
     <title>Interactive World Map with Search</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        /* [existing CSS styles] */
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        #map {
+            height: 80%;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+        .search-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .search-container input {
+            font-size: 1em;
+            padding: 10px;
+            margin: 10px;
+        }
+        .search-container h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <div class="search-container">
         <h2>Enter your location</h2>
-        <input type="text" id="location-input" placeholder="e.g., Zurich" onkeypress="handleKeyPress(event)">
+        <input type="text" id="location-input" placeholder="e.g., Zurich">
         <button onclick="geocode()">Go</button>
     </div>
     <div id="map"></div>
@@ -42,12 +68,6 @@
                     map.fitBounds(poly.getBounds());
                 }
             });
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                geocode();
-            }
         }
     </script>
 </body>
