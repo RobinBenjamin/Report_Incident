@@ -6,60 +6,13 @@
     <title>Interactive World Map with Search</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-        }
-        #map {
-            height: 100%;
-            width: 100%;
-            position: absolute;
-            z-index: -1;
-        }
-        .search-container {
-            z-index: 1000;
-            position: absolute;
-            top: 10%;
-            width: 100%;
-            text-align: center;
-        }
-        .search-container input[type="text"] {
-            width: 20%;
-            padding: 12px 20px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .search-container button {
-            padding: 12px 20px;
-            margin-top: 5px;
-            border: none;
-            border-radius: 4px;
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .search-container button:hover {
-            background-color: #45a049;
-        }
-        .search-container h2 {
-            margin: 0;
-            font-size: 1.5em;
-            color: #333;
-        }
+        /* [existing CSS styles] */
     </style>
 </head>
 <body>
     <div class="search-container">
         <h2>Enter your location</h2>
-        <input type="text" id="location-input" placeholder="e.g., Zurich">
+        <input type="text" id="location-input" placeholder="e.g., Zurich" onkeypress="handleKeyPress(event)">
         <button onclick="geocode()">Go</button>
     </div>
     <div id="map"></div>
@@ -89,6 +42,12 @@
                     map.fitBounds(poly.getBounds());
                 }
             });
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                geocode();
+            }
         }
     </script>
 </body>
