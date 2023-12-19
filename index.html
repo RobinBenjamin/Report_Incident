@@ -5,44 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive World Map with Search</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <style>
-        #map {
-            height: 100%;
-        }
-        html, body {
+        body, html {
             height: 100%;
             margin: 0;
+        }
+        #map {
+            height: 80%;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+        .search-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .search-container input {
+            font-size: 1em;
+            padding: 10px;
+            margin: 10px;
+        }
+        .search-container h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
         }
     </style>
 </head>
 <body>
+    <div class="search-container">
+        <h2>Enter your location</h2>
+        <input type="text" id="location-input" placeholder="e.g., Zurich">
+        <button onclick="geocode()">Go</button>
+    </div>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
         var map = L.map('map').setView([0, 0], 2);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        var geocoder = L.Control.geocoder({
-            defaultMarkGeocode: false
-        })
-        .on('markgeocode', function(e) {
-            var bbox = e.geocode.bbox;
-            var poly = L.polygon([
-                bbox.getSouthEast(),
-                bbox.getNorthEast(),
-                bbox.getNorthWest(),
-                bbox.getSouthWest()
-            ]).addTo(map);
-            map.fitBounds(poly.getBounds());
-        })
-        .addTo(map);
+        var geocoder = L.Control.Geocoder.nominatim();
+
+        function geocode() {
+            var input = document.getElementById('location-input').value;
+            geocoder.geocode(input, function(results) {
+                if (results.length) {
+                    var bbox = results[0].bbox;
+                    var poly = L.polygon([
+                        [bbox[0], bbox[2]],
+                        [bbox[1], bbox[2]],
+                        [bbox[1], bbox[3]],
+                        [bbox[0], bbox[3]]
+                    ]).addTo(map);
+                    map.fitBounds(poly.getBounds());
+                }
+            });
+        }
     </script>
 </body>
 </html>
+
