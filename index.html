@@ -59,6 +59,8 @@
                 geocoder.geocode(input, function(results) {
                     if (results.length) {
                         map.fitBounds(results[0].bbox);
+                        // Hide the search bar
+                        document.getElementById('search-container').style.display = 'none';
                     }
                 });
             }
