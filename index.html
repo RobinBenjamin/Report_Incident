@@ -52,6 +52,31 @@
 
         var geocoder = L.Control.Geocoder.nominatim();
 
+        map.on('click', function(e) {
+    var popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent('<input id="popup-input" type="text" placeholder="Enter text here"><button onclick="addMarker(' + e.latlng.lat + ', ' + e.latlng.lng + ')">Enter</button>')
+        .openOn(map);
+
+    // Wait for the popup to be added to the DOM
+    setTimeout(function() {
+        var input = document.getElementById('popup-input');
+        input.focus();
+        input.onkeypress = function(event) {
+            if (event.key === 'Enter') {
+                addMarker(e.latlng.lat, e.latlng.lng, input.value);
+                map.closePopup();
+            }
+        }
+    }, 10);
+});
+
+function addMarker(lat, lng, text) {
+    var marker = L.marker([lat, lng]).addTo(map);
+    marker.bindPopup(text);
+}
+
+
         function handleKeyPress(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
