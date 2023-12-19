@@ -36,13 +36,12 @@
     </style>
 </head>
 <body>
-    <div class="search-container">
+    <div class="search-container" id="search-container">
         <input type="text" id="location-input" placeholder="Enter location, e.g., Zurich" onkeypress="handleKeyPress(event)">
     </div>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
         var map = L.map('map').setView([0, 0], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -58,7 +57,9 @@
                 var input = document.getElementById('location-input').value;
                 geocoder.geocode(input, function(results) {
                     if (results.length) {
-                        map.fitBounds(results[0].bbox);
+                        var bbox = results[0].bbox;
+                        map.fitBounds([[bbox[0], bbox[2]], [bbox[1], bbox[3]]]);
+                        document.getElementById('search-container').style.display = 'none';
                     }
                 });
             }
@@ -66,3 +67,4 @@
     </script>
 </body>
 </html>
+
