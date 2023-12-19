@@ -36,7 +36,7 @@
     </style>
 </head>
 <body>
-    <div class="search-container">
+    <div class="search-container" id="search-container">
         <input type="text" id="location-input" placeholder="Enter location, e.g., Zurich" onkeypress="handleKeyPress(event)">
     </div>
     <div id="map"></div>
@@ -59,6 +59,7 @@
                 geocoder.geocode(input, function(results) {
                     if (results.length) {
                         map.fitBounds(results[0].bbox);
+                        document.getElementById('search-container').style.display = 'none';
                     }
                 });
             }
